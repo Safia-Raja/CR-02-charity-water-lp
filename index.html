@@ -350,16 +350,14 @@
     </div>
 
     <div class="hero-image">
-      <img 
-        srcset="img/charity_water_Tanzania_TaraShupePhotography_0074.jpg 480w, img/charity_water_Tanzania_TaraShupePhotography_0074.jpg 800w, img/charity_water_Tanzania_TaraShupePhotography_0074.jpg 1600w"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
-          src="img/charity_water_Tanzania_TaraShupePhotography_0074.jpg"
-          width="1600" height="1000"
+      <img
+        src="img/charity_water_Tanzania_TaraShupePhotography_0074.jpg"
         alt="Smiling child with clean water"
-          loading="lazy"
+        width="1600" height="1000"
+        loading="eager"
         decoding="async"
         fetchpriority="high"
-        />
+      />
     </div>
   </section>
 
@@ -367,25 +365,6 @@
   <footer>
     &copy; 2025 charity: water. All rights reserved.
   </footer>
-  <script>
-    // If the connection is fast, encourage the browser to load the hero image sooner
-    (function(){
-      const img = document.querySelector('.hero-image img');
-      if(!img) return;
-      const navTiming = navigator.connection && navigator.connection.effectiveType;
-      const fast = !navTiming || ['4g','wifi','ethernet'].includes(navTiming);
-      function eagerLoad(){
-        if(img.getAttribute('loading') === 'lazy') img.setAttribute('loading','eager');
-        window.removeEventListener('pointerdown', eagerLoad);
-      }
-      if(fast){
-        // quickly switch to eager to improve perceived load
-        img.setAttribute('loading','eager');
-      } else {
-        // load on first user interaction
-        window.addEventListener('pointerdown', eagerLoad, {once:true});
-      }
-    })();
-  </script>
+  <!-- Hero image is preloaded and set to eager; no runtime toggles required -->
 </body>
 </html>

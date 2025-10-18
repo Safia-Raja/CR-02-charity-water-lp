@@ -10,7 +10,7 @@
     /* === Base Styles === */
     body {
       margin: 0;
-      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-family: "Proxima Nova", Arial, sans-serif;
       color: #111;
       background-color: #FFF7E1; /* soft light yellow background */
     }
@@ -103,11 +103,13 @@
     }
 
     .hero-text h2 {
-      font-size: 2.2rem;
-      font-weight: bold;
-      line-height: 1.4;
+      /* Larger and thinner headline for a more elegant feel */
+      font-size: clamp(1.8rem, 4.6vw, 3.2rem);
+      font-weight: 300; /* lighter than bold but still sturdy */
+      line-height: 1.18; /* tighter lines for headline blocks */
       margin-bottom: 1rem;
       text-transform: uppercase;
+      letter-spacing: 0.6px;
     }
 
     .hero-text p {
@@ -363,7 +365,7 @@
         to clean water projects, and we'll prove the tangible impact with GPS coordinates.
       </p>
       <button class="cta-button" aria-label="Making an impact">
-        <span class="btn-line">MAKING AN IMPACT!</span>
+        <span class="btn-line">MAKE AN IMPACT!</span>
       </button>
     </div>
 

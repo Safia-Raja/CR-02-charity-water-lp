@@ -1,47 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Landing Page</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>charity: water | Clean Water Starts Here</title>
+  <!-- Preload the hero image to improve perceived load time on capable connections -->
+  <link rel="preload" as="image" href="img/charity_water_Tanzania_TaraShupePhotography_0074.jpg">
+  <style>
+    /* === Base Styles === */
+    body {
+      margin: 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color: #111;
+      background-color: #fffbea; /* soft light yellow background */
+    }
+
+    /* === Header === */
+    header {
+      background-color: #fcd918; /* brand yellow */
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* put brand left and actions right */
+      padding: 0.6rem 2rem;          /* slightly tighter vertically like the design */
+      box-shadow: 0 2px 0 rgba(0,0,0,0.08); /* subtle bottom shadow */
+    }
+
+    /* New: brand link with logo + text */
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-link img {
+      height: 52px; /* keeps header height consistent */
+      width: auto;
+      display: block;
+      transform: scale(7); /* visually enlarge logo */
+      transform-origin: left center; /* keeps alignment */
+    }
+
+
+    .brand-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #111;
+      letter-spacing: 1px;
+    }
+
+    /* Global variables for responsive sizing */
+    :root {
+      --header-h: 72px;
+      --footer-h: 96px;
+      --gap: 20px;
+      --container-pad-lg: 4rem;
+      --container-pad-md: 2.5rem;
+      --container-pad-sm: 1.25rem;
+    }
+
+    /* Header actions (right side) */
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .login-link {
+      text-decoration: none;
+      color: #0d2636;
+      background: transparent;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      border: 2px solid rgba(0,0,0,0.06);
+    }
+
+    .login-link:hover { background: rgba(0,0,0,0.04); }
+
+    /* === Hero Section === */
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4rem 2rem;
+      background-color: #fffbea;
+    }
+
+    .hero-text {
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+      /* center content vertically and horizontally inside the yellow block */
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* vertical centering */
+      align-items: center;     /* horizontal centering */
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    .hero-text h2 {
+      font-size: 2.2rem;
+      font-weight: bold;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .hero-text p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: #333;
+    }
+
+    .cta-button {
+      background-color: #fcd918;
+      color: #000;
+      font-weight: 800;
+      border: none;
+  /* keep button natural width (no forced wide layout) but keep text centered */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.25rem 2.5rem; /* larger tappable area */
+  font-size: 1.3rem;     /* bigger label text only */
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .cta-button:hover {
+      background-color: #f5c400;
+      transform: scale(1.05);
+    }
+
+    /* Entrance animations for hero content */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-text h2,
+    .hero-text p,
+    .cta-button,
+    .hero-image img {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 700ms ease forwards;
+    }
+
+
+    /* Accessible focus styles */
+    .cta-button:focus-visible,
+    .login-link:focus-visible {
+      outline: 3px solid rgba(10,165,162,0.18);
+      box-shadow: 0 0 0 4px rgba(10,165,162,0.12);
+      border-radius: 8px;
+    }
+
+    /* Mobile nav toggle (hidden on desktop) */
+    .nav-toggle{
+      display: none;
+      background: transparent;
+      border: none;
+      font-size: 1.35rem;
+      cursor: pointer;
+      padding: 6px 8px;
+    }
+
+    @media (max-width: 768px){
+      .nav-toggle{ display: inline-flex; }
+      /* initially hide header actions on mobile; .open will reveal */
+      .header-actions{ display: none; }
+      .header-actions.open{ display: flex; flex-direction: column; gap: 8px; background: rgba(255,255,255,0.02); padding: 8px; position: absolute; right: 12px; top: 56px; border-radius: 8px; }
+    }
+    .hero-text h2 { animation-delay: 0.12s; }
+    .hero-text p  { animation-delay: 0.32s; }
+    .hero-image img { animation-delay: 0.52s; }
+    .cta-button { animation-delay: 0.68s; }
+
+    /* let the line inside the button take full width */
+    .cta-button .btn-line { display: block; width: 100%; }
+
+    /* Pop animation for the emphasized IMPACT word */
+    @keyframes impactPop {
+      0%   { transform: scale(0.96); opacity: 0; }
+      60%  { transform: scale(1.14); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .impact-word {
+      display: inline-block;
+      margin-left: 0.6ch;
+      padding: 0.08rem 0.45rem;
+      border-radius: 6px;
+      background: rgba(13,38,54,0.06);
+      color: #0d2636;
+      font-weight: 900;
+    }
+
+    .impact-word:hover { transform: scale(1.04); }
+
+    /* Apply the pop animation to the entire CTA button (runs after fadeUp) */
+    .cta-button {
+      /* two animations: entrance (fadeUp) then pop (impactPop) */
+      animation: fadeUp 700ms ease forwards, impactPop 900ms cubic-bezier(.2,.9,.3,1) 0.9s both;
+      transform-origin: center;
+    }
+
+    /* === Responsive Hero (image + text) === */
+    .hero{
+      display: flex;
+      gap: var(--gap);
+      align-items: stretch;
+      justify-content: space-between;
+      padding: 0;
+      background-color: #fffbea;
+      /* Reserve space for header/footer so hero generally fits the viewport */
+      min-height: calc(100vh - var(--header-h) - var(--footer-h));
+      overflow: hidden;
+    }
+
+    .hero-text{
+      flex: 1 1 420px;
+      min-width: 280px;
+      max-width: 760px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; /* center horizontally */
+      text-align: center;
+      padding: calc(var(--container-pad-lg) / 1.2);
+      background-color: transparent;
+    }
+
+    /* Fluid, beginner-friendly type scaling */
+    .hero-text h2{ font-size: clamp(1.4rem, 3.2vw, 2.4rem); }
+    .hero-text p { font-size: clamp(0.95rem, 1.4vw, 1.05rem); }
+
+    .hero-image{ flex: 1 1 360px; min-width: 240px; margin: 0; display:flex; align-items:center; justify-content:center; /* placeholder while image loads */
+      background-color: #e9f7f6;
+      background-image: linear-gradient(180deg, rgba(10,165,162,0.04), rgba(13,38,54,0.02));
+      background-size: cover;
+    }
+    .hero-image img{
+      /* Ensure the full image is visible (no cropping). The image will scale down
+         to fit the container while preserving aspect ratio. This may introduce
+         letterboxing (empty space) but avoids cutting off content. */
+      object-fit: contain;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+    }
+
+    /* Responsive tweaks: tablet */
+    @media (max-width: 1024px){
+      .hero-text{ padding: var(--container-pad-md); align-items: center; text-align: center; }
+      .hero{ min-height: calc(100vh - var(--header-h) - var(--footer-h) - 40px); }
+    }
+
+    /* Mobile: stack content vertically for best readability */
+    @media (max-width: 768px){
+      .hero{ flex-direction: column; min-height: auto; }
+      .hero-text{ padding: var(--container-pad-sm); align-items: center; text-align: center; }
+      .hero-image{ width: 100%; height: 40vh; }
+      .hero-image img{ height: 100%; }
+      .login-link{ padding: 6px 10px; font-size: 0.95rem; }
+      .cta-button{ width: auto; font-size: 1.15rem; }
+    }
+
+    /* Small phones */
+    @media (max-width: 420px){
+      .hero-image{ height: 30vh; }
+      .hero-text h2{ font-size: 1.15rem; }
+      .hero-text p{ font-size: 0.95rem; }
+      .cta-button{ padding: 0.9rem 1.6rem; font-size: 1.05rem; }
+    }
+
+
+    /* === Footer === */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #fcd918;
+      color: #000;
+      font-size: 0.9rem;
+    }
+
+    /* === Responsive Design === */
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+      .hero-text {
+        padding-right: 0;
+      }
+      .cta-button {
+        width: auto;
+        max-width: none;
+        padding: 1rem 2rem; /* slightly reduce on small screens to fit */
+        font-size: 1.15rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Hero Section: This is the main banner at the top of the page -->
-    <section class="hero">
-        <!-- Main headline -->
-        <h1>Clean Water for Everyone</h1>
-        <!-- Subheadline -->
-        <p>Join us in bringing safe, clean water to communities in need.</p>
-    </section>
+  <!-- Header -->
+  <!-- Header: local logo file displayed in the yellow bar -->
+  <header>
+    <a href="#" class="brand-link" aria-label="charity: water home">
+      <img src="img/charitywater_logo_horizontal_AllBlack.png" alt="charity: water logo" />
+    </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="header-actions" aria-label="Toggle navigation">☰</button>
+      <div id="header-actions" class="header-actions">
+        <a href="#login" class="login-link" aria-label="Login">Login</a>
+      </div>
+  </header>
+    <script>
+      document.querySelector('.nav-toggle').addEventListener('click', function() {
+        const headerActions = document.getElementById('header-actions');
+        headerActions.classList.toggle('open');
+        const expanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', !expanded);
+      });
+    </script>
 
-    <!-- Story Section: This tells the story of the nonprofit -->
-    <section class="story">
-        <h2>Our Story</h2>
-        <p>
-         
-    </section>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <h2>YOU FUND IT.<br>WE PROVE IT.<br>CLEAN WATER STARTS HERE.</h2>
+      <p>
+        Take direct action on the global water crisis. 100% of your donation is dedicated
+        to clean water projects, and we'll prove the tangible impact with GPS coordinates.
+      </p>
+      <button class="cta-button" aria-label="Making an impact">
+        <span class="btn-line">MAKING AN IMPACT!</span>
+      </button>
+    </div>
 
-    <!-- Real-World Impact Story Section -->
-    <section class="impact-story">
-        <!-- Section headline -->
-        <h2>Real Impact: Meet Amina</h2>
-        <!-- Container for image and text -->
-        <div class="impact-content">
-            <!-- Impact image -->
-            <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" alt="Amina smiling with clean water" class="impact-image">
-            <!-- Impact story text -->
-            <p>
-                Amina used to walk miles every day to collect water for her family. Thanks to your support, her village now has a clean water well. Amina can go to school and her family is healthier and happier.
-            </p>
-        </div>
-    </section>
+    <div class="hero-image">
+      <img 
+        srcset="img/charity_water_Tanzania_TaraShupePhotography_0074.jpg 480w, img/charity_water_Tanzania_TaraShupePhotography_0074.jpg 800w, img/charity_water_Tanzania_TaraShupePhotography_0074.jpg 1600w"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+          src="img/charity_water_Tanzania_TaraShupePhotography_0074.jpg"
+          width="1600" height="1000"
+        alt="Smiling child with clean water"
+          loading="lazy"
+        decoding="async"
+        fetchpriority="high"
+        />
+    </div>
+  </section>
 
-    <!-- Call-to-Action Section: This encourages visitors to take action -->
-    <section class="call-to-action">
-        <h2>Make a Difference</h2>
-        <p>Your support can help save lives. Every donation brings us closer to a world with clean water for all.</p>
-        <a href="#" class="donate-button">Donate Now</a>
-    </section>
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 charity: water. All rights reserved.
+  </footer>
+  <script>
+    // If the connection is fast, encourage the browser to load the hero image sooner
+    (function(){
+      const img = document.querySelector('.hero-image img');
+      if(!img) return;
+      const navTiming = navigator.connection && navigator.connection.effectiveType;
+      const fast = !navTiming || ['4g','wifi','ethernet'].includes(navTiming);
+      function eagerLoad(){
+        if(img.getAttribute('loading') === 'lazy') img.setAttribute('loading','eager');
+        window.removeEventListener('pointerdown', eagerLoad);
+      }
+      if(fast){
+        // quickly switch to eager to improve perceived load
+        img.setAttribute('loading','eager');
+      } else {
+        // load on first user interaction
+        window.addEventListener('pointerdown', eagerLoad, {once:true});
+      }
+    })();
+  </script>
 </body>
 </html>
